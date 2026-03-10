@@ -7,3 +7,4 @@ Sub-Library of PySide6 with simplified Python Functions
     - tools
     - widgets
 '''
+from ._version import __version__

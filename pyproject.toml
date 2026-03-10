@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "easypyside"
-version = "2025.11.21"
+dynamic = ["version"]
 description = "Simple wrapper for PySide6"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -27,6 +27,9 @@ include = ["easypyside*"]
 
 [tool.setuptools.package-data]
 easypyside = ["__forms/*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "easypyside.__version__" }
 
 [project.urls]
 "Homepage" = "https://github.com/PaulFilms/EasyPySide"
