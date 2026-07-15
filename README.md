@@ -76,6 +76,29 @@ This project relies on the following open-source libraries:
 - Create unit test
 - FORMS | pyside6-rcc easypyside/__resources.qrc -o easypyside/__resources_rc.py
 - WIDGETS | Add more compatible widgets
+- PIP Instalation and Optional dependencies
+   
+   Basic installation:
+   ```bash
+   pip install easypyside
+   ```
+
+   With pandas support:
+
+   ```bash
+   pip install easypyside[pandas]
+   ```
+
+   With Markdown support:
+   ```bash
+   pip install easypyside[markdown]
+   ```
+
+   With all optional features:
+   ```bash
+   pip install easypyside[all]
+   ```
+
 
 ## WARNINGS ⛔
 

@@ -1,14 +1,6 @@
 '''
 Toolkit with simplified functions and methods for development with PySide6
-
-TASK:
-    - ...
-
-WARNINGS:
-    - All functions are copied of PyQt6 Library, ¡¡ be carefull !!
-    - Only tested under Windows 11
-
-________________________________________________________________________________________________ '''
+'''
 
 ''' SYSTEM LIBRARIES '''
 import os

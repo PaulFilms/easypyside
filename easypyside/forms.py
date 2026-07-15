@@ -1,17 +1,25 @@
 '''
 PySide6 Custom Forms Toolkit for development 
 '''
-__update__ = '2024.09.08'
 
 from typing import Tuple, List, Dict, Union
 from dataclasses import dataclass
 
 from PySide6.QtGui import QIcon, QFont, QCloseEvent
 from PySide6.QtWidgets import QDialog, QMessageBox, QInputDialog, QHeaderView
-import markdown2
 
-import easypyside.resources ## Resources
-from easypyside.widgets import CELL_WR, CELL_RD, CELL_CHECKBOX, CELL_SPINBOX, CELL_COMBOBOX, CELL_READONLY
+# BUG: Temporal hasta despues de testeo
+# import easypyside.resources ## Resources
+# from easypyside.widgets import CELL_WR, CELL_RD, CELL_CHECKBOX, CELL_SPINBOX, CELL_COMBOBOX, CELL_READONLY
+
+from . import resources ## Resources
+from .widgets import CELL_WR, CELL_RD, CELL_CHECKBOX, CELL_SPINBOX, CELL_COMBOBOX, CELL_READONLY
+
+''' OPTIONALS '''
+# from __future__ import annotations
+# from typing import TYPE_CHECKING
+# if TYPE_CHECKING:
+#     import markdown2
 
 
 
@@ -154,7 +162,10 @@ class QLIST_FORM(QDialog):
     def ITEM_DEL(self) -> None:
         if self.ui.lst_items.currentRow() < 0:
             return
-        if not YESNOBOX("ATTENTION", "DO YOU WANT TO DELETE THIS FIELD ?", icon=self.icon):
+        if not YESNOBOX(
+            winTitle="ATTENTION", info="DO YOU WANT TO DELETE THIS FIELD ?", 
+            # icon=self.icon
+            ):
             return
         self.ui.lst_items.takeItem(self.ui.lst_items.currentIndex().row())
         self.GET_ITEMS()
@@ -294,8 +305,11 @@ class QMARKDOWN(QDialog):
     '''
     Markdown format Text Form
     '''
-    def __init__(self, MD_TEXT: str = str(), Window_Title: str="MarkDown Text", icon: QIcon = None) -> None:
+    def __init__(self, MD_TEXT: str, Window_Title: str, icon: QIcon = None) -> None:
         QDialog.__init__(self)
+        
+        from ._optional import markdown2
+        md = markdown2()
         
         ''' INIT '''
         self.ui = PYSIDE_QMARKDOWN.Ui_Dialog()
@@ -306,7 +320,8 @@ class QMARKDOWN(QDialog):
         if icon: self.setWindowIcon(icon)
         self.setWindowTitle(Window_Title)
         self.ui.tx_preview.setReadOnly(True)
-        html_text = markdown2.markdown(MD_TEXT)
+        # html_text = markdown2.markdown(MD_TEXT) # BUG: Import estandar
+        html_text = md.markdown(MD_TEXT)
         self.ui.tx_preview.setHtml(html_text)
 
 class QACQUISITIONS(QDialog):

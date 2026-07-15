@@ -1,23 +1,12 @@
 '''
 Toolkit with simplified functions and methods for development with PySide6
-
-INCOMPLETE:
-
-- QTime edit wraps
-
-PLANNED:
-
-- 
-
 '''
-__author__ = 'PABLO GONZALEZ PILA <pablogonzalezpila@gmail.com>'
-__update__ = '2025.10.28'
 
 ''' SYSTEM LIBRARIES '''
 from dataclasses import dataclass
 from enum import Enum, auto
 # from re import match
-from typing import Any, List, Tuple, Union, TYPE_CHECKING
+from typing import Any, List, Tuple, Union, 
 # from unittest import case
 
 ''' EXTERNAL LIBRARIES '''
@@ -26,11 +15,15 @@ from PySide6.QtGui import QFont, QColor
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QHeaderView
 from PySide6.QtWidgets import QLineEdit, QTextEdit, QComboBox, QSpinBox, QDoubleSpinBox, QCheckBox, QDateEdit, QTimeEdit, QPushButton, QPlainTextEdit
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem
-# if TYPE_CHECKING:
-import pandas as pd
 
 ''' INTERNAL LIBRARIES '''
 from .tools import DATE_QDATE_CONVERTER, DATE_STR_CONVERTER, TIME_STR_CONVERTER
+
+''' OPTIONALS '''
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    import pandas as _pd
 
 
 
@@ -673,7 +666,7 @@ def TBL_INIT(TABLE: QTableWidget) -> None:
     TABLE.setColumnCount(0)
     TABLE.setEnabled(True)
 
-def TBL_POP_PANDAS_DF(TABLE: QTableWidget, DATAFRAME: 'pd.DataFrame', HIDE_COLUMNS: list=[], PROTECTED_COLUMNS: list=[]) -> None:
+def TBL_POP_PANDAS_DF(TABLE: QTableWidget, DATAFRAME: _pd.DataFrame, HIDE_COLUMNS: list=[], PROTECTED_COLUMNS: list=[]) -> None:
     '''
     Populate QTable with a Pandas DataFrame
     
@@ -685,6 +678,9 @@ def TBL_POP_PANDAS_DF(TABLE: QTableWidget, DATAFRAME: 'pd.DataFrame', HIDE_COLUM
         - Some times show: QAbstractItemView::closeEditor called with an editor that does not belong to this view
         - Add the TBL_FIELD_FORMAT class
     '''
+    from ._optional import pandas
+    pd = pandas()
+
     ## INIT TBL
     TABLE.setEnabled(False)
     TABLE.setRowCount(0)
@@ -706,7 +702,6 @@ def TBL_POP_PANDAS_DF(TABLE: QTableWidget, DATAFRAME: 'pd.DataFrame', HIDE_COLUM
     #     return col_idx in protected_indices
     
     ## POPULATE TABLE CELLS
-    # Populate table cells
     for row_idx, (_, row_data) in enumerate(DATAFRAME.iterrows()):
         for col_idx, col_name in enumerate(columns):
             cell_value = row_data[col_name]
@@ -780,22 +775,24 @@ def TBL_FIELD_RESIZE(TABLE: QTableWidget, header: Union[int, str]) -> None:
     header_indx = TBL_GET_HEADER_INDEX(TABLE, COLUMN=header)
     TABLE.horizontalHeader().setSectionResizeMode(header_indx, QHeaderView.ResizeMode.Fixed)
 
-def TBL_GET_PANDAS_DF(TABLE: QTableWidget) -> 'pd.DataFrame':
+def TBL_GET_PANDAS_DF(TABLE: QTableWidget) -> _pd.DataFrame:
     '''
     Create Pandas DataFrame from QTable data
     '''
-    HEADERS: list = TBL_GET_HEADERS(TABLE)
-    ## 
-    DATAFRAME: dict = {}
-    for field in HEADERS: 
-        LIST: list = []
+    from ._optional import pandas
+    pd = pandas()
+
+    headers: list = TBL_GET_HEADERS(TABLE)
+    data: dict = {}
+
+    for field in headers: 
+        data_list: list = []
         for row in range(TABLE.rowCount()):
             VALUE = CELL_RD(TABLE, row, field)
-            LIST.append(VALUE)
-        DATAFRAME[field] = LIST
-    ## 
-    DATAFRAME = pd.DataFrame(DATAFRAME)
-    return DATAFRAME
+            data_list.append(VALUE)
+        data[field] = data_list
+
+    return pd.DataFrame(data)
 
 def TBL_VHEADER_WIDTH_FIX(TABLE: QTableWidget, COLUMNS: List[int] | List[str] | Tuple[int] | Tuple[str]):
     '''
